@@ -138,18 +138,14 @@ echo ""
 echo -e "${BLUE}═════════════════════════════════════════${NC}"
 echo -e "${BLUE}  Home Assistant Integration (Optional)${NC}"
 echo -e "${BLUE}═════════════════════════════════════════${NC}"
+echo ""
+echo -e "${YELLOW}Hinweis:${NC} Home Assistant wird über n8n integriert."
+echo "Die Console benötigt keinen direkten Home Assistant Zugriff."
+echo ""
+echo "Für Details siehe: HOME-ASSISTANT-SETUP.md"
 
-read -p "Home Assistant konfigurieren? (j/n): " SETUP_HA
-
-if [[ $SETUP_HA == "j" || $SETUP_HA == "J" ]]; then
-    read_with_default "Home Assistant IP" "192.168.12.181" HA_IP
-    read_with_default "Home Assistant Port" "8123" HA_PORT
-    read_with_default "Home Assistant Access Token" "" HA_TOKEN
-
-    if [ -z "$HA_TOKEN" ]; then
-        print_warning "Kein Token angegeben. Bitte später in HOME-ASSISTANT-SETUP.md nachschlagen."
-    fi
-fi
+# Keine HA-Konfiguration nötig - läuft über n8n
+SETUP_HA="n"
 
 #######################################
 # 3. Dependencies installieren
@@ -214,7 +210,7 @@ LOCAL_IP=${LOCAL_IP}
 # n8n Integration
 N8N_WEBHOOK_URL=${N8N_WEBHOOK_URL}
 
-# Home Assistant (Optional)
+# Home Assistant Integration erfolgt über n8n (siehe HOME-ASSISTANT-SETUP.md)
 EOF
 
 if [[ $SETUP_HA == "j" || $SETUP_HA == "J" ]]; then

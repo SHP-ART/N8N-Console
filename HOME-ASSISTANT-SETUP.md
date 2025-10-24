@@ -2,6 +2,8 @@
 
 Diese Anleitung zeigt, wie du den AI Agent in n8n mit Home Assistant verbindest, sodass du dein Smart Home per Chat steuern kannst.
 
+> **Wichtig:** Die Home Assistant Integration erfolgt **in n8n**, nicht in der Console selbst. Die Console benötigt keinen direkten Home Assistant Zugriff. Alle Befehle werden über n8n an Home Assistant weitergeleitet.
+
 ## 📋 Voraussetzungen
 
 - n8n installiert und laufend
