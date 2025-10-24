@@ -1,16 +1,73 @@
-# N8N Console Output
+# N8N Console
 
-Eine moderne Console-Webseite mit Terminal-Look als Ausgabe für n8n Workflows.
+Eine moderne Console-Webseite mit Terminal-Look als **bidirektionale** Kommunikation für n8n Workflows.
 
 ## Features
 
 - 🎨 Modernes Terminal-Design mit Retro-Look
 - 📡 Real-time Updates über Server-Sent Events (SSE)
+- 🔄 **Bidirektional**: n8n → Console UND Console → n8n
 - 🎯 Webhook-Unterstützung für n8n
-- 🔄 Auto-Scroll Funktion
+- 💬 Chat-Befehle (/help, /clear, /test, /status)
 - 🎨 Verschiedene Nachrichtentypen (Info, Success, Warning, Error)
 - 📊 Status-Anzeige mit Verbindungsstatus
 - 🧹 Clear-Funktion zum Löschen der Console
+- 🏠 Home Assistant Integration (optional)
+
+## Quick Start
+
+### 1. Projekt herunterladen
+
+```bash
+# Mit Git (empfohlen):
+git clone https://github.com/SHP-ART/N8N-Console.git
+cd N8N-Console
+```
+
+**Oder ohne Git:**
+1. Gehe zu https://github.com/SHP-ART/N8N-Console
+2. Klicke auf den grünen **"Code"** Button
+3. Wähle **"Download ZIP"**
+4. Entpacke die ZIP-Datei
+5. Öffne ein Terminal im entpackten Ordner
+
+### 2. Installation & Start
+
+**Automatisch (empfohlen):**
+```bash
+./setup.sh
+```
+
+Das Setup-Skript konfiguriert alles automatisch und startet die Console.
+
+**Manuell:**
+```bash
+npm install
+npm start
+```
+
+### 3. Console öffnen
+
+Öffne deinen Browser und gehe zu:
+```
+http://localhost:3000
+```
+
+Fertig! 🎉
+
+### Voraussetzungen
+
+Bevor du startest, stelle sicher, dass folgendes installiert ist:
+
+- **Node.js** (Version 14 oder höher) - [Download](https://nodejs.org/)
+- **npm** (kommt mit Node.js)
+- **Git** (optional, für Updates) - [Download](https://git-scm.com/)
+
+**Prüfe deine Installation:**
+```bash
+node -v   # Sollte v14.0.0 oder höher anzeigen
+npm -v    # Sollte eine Versionsnummer anzeigen
+```
 
 ## Installation
 
