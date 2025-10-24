@@ -61,6 +61,17 @@ read_with_default() {
     eval $var_name="${input:-$default}"
 }
 
+# Sudo verwenden nur wenn nicht root
+run_as_root() {
+    if [ "$(id -u)" -eq 0 ]; then
+        # Bereits root, kein sudo nötig
+        "$@"
+    else
+        # Nicht root, sudo verwenden
+        sudo "$@"
+    fi
+}
+
 #######################################
 # 1. Systemprüfung
 #######################################
@@ -220,14 +231,22 @@ if [[ "$OSTYPE" != "darwin"* ]] && command_exists systemctl; then
         CURRENT_DIR=$(pwd)
         CURRENT_USER=$(whoami)
 
-        sudo tee /etc/systemd/system/n8n-console.service > /dev/null << EOF
+        # Bestimme den User für den Service
+        if [ "$(id -u)" -eq 0 ]; then
+            # Wenn als root ausgeführt, verwende root für den Service
+            SERVICE_USER="root"
+        else
+            SERVICE_USER="${CURRENT_USER}"
+        fi
+
+        run_as_root tee /etc/systemd/system/n8n-console.service > /dev/null << EOF
 [Unit]
 Description=N8N Console Server
 After=network.target
 
 [Service]
 Type=simple
-User=${CURRENT_USER}
+User=${SERVICE_USER}
 WorkingDirectory=${CURRENT_DIR}
 ExecStart=$(which node) ${CURRENT_DIR}/server.js
 Restart=on-failure
@@ -241,15 +260,22 @@ Environment=NODE_ENV=production
 WantedBy=multi-user.target
 EOF
 
-        sudo systemctl daemon-reload
+        run_as_root systemctl daemon-reload
         print_success "Systemd Service erstellt: /etc/systemd/system/n8n-console.service"
 
         echo ""
         echo "Service-Befehle:"
-        echo "  sudo systemctl start n8n-console    # Service starten"
-        echo "  sudo systemctl stop n8n-console     # Service stoppen"
-        echo "  sudo systemctl status n8n-console   # Status anzeigen"
-        echo "  sudo systemctl enable n8n-console   # Auto-Start aktivieren"
+        if [ "$(id -u)" -eq 0 ]; then
+            echo "  systemctl start n8n-console    # Service starten"
+            echo "  systemctl stop n8n-console     # Service stoppen"
+            echo "  systemctl status n8n-console   # Status anzeigen"
+            echo "  systemctl enable n8n-console   # Auto-Start aktivieren"
+        else
+            echo "  sudo systemctl start n8n-console    # Service starten"
+            echo "  sudo systemctl stop n8n-console     # Service stoppen"
+            echo "  sudo systemctl status n8n-console   # Status anzeigen"
+            echo "  sudo systemctl enable n8n-console   # Auto-Start aktivieren"
+        fi
     fi
 fi
 
@@ -315,7 +341,7 @@ if [[ "$OSTYPE" != "darwin"* ]] && command_exists ufw; then
     read -p "Port ${CONSOLE_PORT} in UFW Firewall freigeben? (j/n): " SETUP_FIREWALL
 
     if [[ $SETUP_FIREWALL == "j" || $SETUP_FIREWALL == "J" ]]; then
-        sudo ufw allow ${CONSOLE_PORT}/tcp comment 'N8N Console'
+        run_as_root ufw allow ${CONSOLE_PORT}/tcp comment 'N8N Console'
         print_success "Port ${CONSOLE_PORT} in UFW freigegeben"
     else
         print_warning "Stelle sicher, dass Port ${CONSOLE_PORT} von n8n erreichbar ist!"

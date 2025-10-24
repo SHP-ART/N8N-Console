@@ -49,6 +49,17 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Sudo verwenden nur wenn nicht root
+run_as_root() {
+    if [ "$(id -u)" -eq 0 ]; then
+        # Bereits root, kein sudo nötig
+        "$@"
+    else
+        # Nicht root, sudo verwenden
+        sudo "$@"
+    fi
+}
+
 #######################################
 # 1. Voraussetzungen prüfen
 #######################################
@@ -245,14 +256,18 @@ if [ "$SERVICE_RESTARTED" = false ] && command_exists systemctl; then
     if systemctl is-active --quiet n8n-console 2>/dev/null; then
         print_step "Starte Systemd Service neu..."
 
-        sudo systemctl restart n8n-console
+        run_as_root systemctl restart n8n-console
 
         if [ $? -eq 0 ]; then
             print_success "Systemd Service erfolgreich neugestartet"
             SERVICE_RESTARTED=true
 
             echo ""
-            echo "Status anzeigen mit: sudo systemctl status n8n-console"
+            if [ "$(id -u)" -eq 0 ]; then
+                echo "Status anzeigen mit: systemctl status n8n-console"
+            else
+                echo "Status anzeigen mit: sudo systemctl status n8n-console"
+            fi
         else
             print_error "Systemd Restart fehlgeschlagen"
         fi
@@ -306,8 +321,13 @@ if [ "$SERVICE_RESTARTED" = true ]; then
         echo "  pm2 logs n8n-console        # Logs anzeigen"
         echo "  pm2 status                  # Status prüfen"
     elif systemctl is-active --quiet n8n-console 2>/dev/null; then
-        echo "  sudo systemctl status n8n-console   # Status prüfen"
-        echo "  sudo journalctl -u n8n-console -f  # Logs anzeigen"
+        if [ "$(id -u)" -eq 0 ]; then
+            echo "  systemctl status n8n-console   # Status prüfen"
+            echo "  journalctl -u n8n-console -f  # Logs anzeigen"
+        else
+            echo "  sudo systemctl status n8n-console   # Status prüfen"
+            echo "  sudo journalctl -u n8n-console -f  # Logs anzeigen"
+        fi
     fi
 fi
 echo "  git log --oneline -10       # Letzte Commits anzeigen"
