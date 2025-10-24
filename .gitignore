@@ -15,6 +15,7 @@ logs/
 # Backup files
 *.backup
 server.js.backup
+backups/
 
 # OS files
 .DS_Store

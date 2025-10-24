@@ -14,6 +14,18 @@ Eine moderne Console-Webseite mit Terminal-Look als Ausgabe für n8n Workflows.
 
 ## Installation
 
+### Automatische Installation (empfohlen)
+
+```bash
+git clone https://github.com/SHP-ART/N8N-Console.git
+cd N8N-Console
+./setup.sh
+```
+
+Das Setup-Skript führt dich durch die komplette Konfiguration.
+
+### Manuelle Installation
+
 1. Dependencies installieren:
 ```bash
 npm install
@@ -30,6 +42,30 @@ npm run dev
 ```
 
 Der Server läuft standardmäßig auf `http://localhost:3000`
+
+## Updates
+
+### Automatisches Update von GitHub
+
+```bash
+./update.sh
+```
+
+Das Update-Skript:
+- ✅ Erstellt automatische Backups (.env & server.js)
+- ✅ Lädt neueste Version von GitHub
+- ✅ Prüft auf package.json Änderungen
+- ✅ Installiert Dependencies bei Bedarf
+- ✅ Startet PM2/Systemd Service automatisch neu
+- ✅ Zeigt Changelog an
+
+### Manuelles Update
+
+```bash
+git pull origin main
+npm install  # falls package.json geändert wurde
+pm2 restart n8n-console  # oder: sudo systemctl restart n8n-console
+```
 
 ## Verwendung
 
