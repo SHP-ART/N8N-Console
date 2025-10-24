@@ -286,17 +286,43 @@ if command_exists pm2; then
     read -p "PM2 Process Manager verwenden? (j/n): " USE_PM2
 
     if [[ $USE_PM2 == "j" || $USE_PM2 == "J" ]]; then
+        # Stoppe und lösche alte Instanz falls vorhanden
         pm2 delete n8n-console 2>/dev/null || true
-        pm2 start server.js --name n8n-console
+
+        print_step "Starte n8n-console mit PM2..."
+
+        # Starte mit Umgebungsvariablen
+        PORT=${CONSOLE_PORT} pm2 start server.js --name n8n-console --time
+
+        # Speichere PM2 Konfiguration
         pm2 save
 
-        print_success "PM2 konfiguriert"
+        print_success "PM2 Service gestartet"
+
+        # Auto-Start beim Systemstart konfigurieren
+        echo ""
+        read -p "PM2 Auto-Start beim Systemstart aktivieren? (j/n): " PM2_STARTUP
+
+        if [[ $PM2_STARTUP == "j" || $PM2_STARTUP == "J" ]]; then
+            print_step "Konfiguriere PM2 Startup..."
+            pm2 startup | grep -o 'sudo.*' | bash || true
+            pm2 save
+            print_success "PM2 Auto-Start aktiviert"
+        fi
+
+        # Zeige Status
+        echo ""
+        pm2 status
+
+        echo ""
+        print_success "Console läuft auf: http://${LOCAL_IP}:${CONSOLE_PORT}"
         echo ""
         echo "PM2 Befehle:"
         echo "  pm2 status              # Status anzeigen"
         echo "  pm2 logs n8n-console    # Logs anzeigen"
         echo "  pm2 restart n8n-console # Neu starten"
         echo "  pm2 stop n8n-console    # Stoppen"
+        echo "  pm2 monit               # Monitoring Dashboard"
     fi
 else
     print_warning "PM2 nicht installiert. Installiere mit: npm install -g pm2"
@@ -404,7 +430,11 @@ if [[ $OPEN_BROWSER == "j" || $OPEN_BROWSER == "J" ]]; then
     CONSOLE_URL="http://${LOCAL_IP}:${CONSOLE_PORT}"
 
     # Starte Server im Hintergrund wenn nicht bereits gestartet (z.B. durch PM2)
-    if [[ $USE_PM2 != "j" && $USE_PM2 != "J" ]]; then
+    if [[ $USE_PM2 == "j" || $USE_PM2 == "J" ]]; then
+        print_step "Server läuft bereits mit PM2"
+        # Warte kurz um sicherzustellen dass PM2 bereit ist
+        sleep 2
+    else
         print_step "Starte Server..."
         PORT=${CONSOLE_PORT} node server.js &
         SERVER_PID=$!
@@ -417,13 +447,13 @@ if [[ $OPEN_BROWSER == "j" || $OPEN_BROWSER == "J" ]]; then
     # Öffne Browser
     if [[ "$OSTYPE" == "darwin"* ]]; then
         # macOS
-        open "$CONSOLE_URL"
+        open "$CONSOLE_URL" 2>/dev/null
     elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
         # Linux
         if command_exists xdg-open; then
-            xdg-open "$CONSOLE_URL"
+            xdg-open "$CONSOLE_URL" 2>/dev/null
         elif command_exists gnome-open; then
-            gnome-open "$CONSOLE_URL"
+            gnome-open "$CONSOLE_URL" 2>/dev/null
         else
             print_warning "Kein Browser-Starter gefunden. Öffne manuell: $CONSOLE_URL"
         fi
