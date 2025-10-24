@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N8N Console Output</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="console-container">
+        <div class="console-header">
+            <div class="console-title">
+                <span class="console-icon">▶</span>
+                N8N Console Output
+            </div>
+            <div class="console-controls">
+                <button class="btn-clear" onclick="clearConsole()">Clear</button>
+                <button class="btn-toggle" onclick="toggleAutoScroll()">Auto-Scroll: <span id="autoscroll-status">ON</span></button>
+            </div>
+        </div>
+        <div class="console-body" id="console">
+            <div class="console-line system">
+                <span class="timestamp">[System]</span>
+                <span class="message">Console bereit. Warte auf n8n Nachrichten...</span>
+            </div>
+        </div>
+        <div class="console-input">
+            <div class="input-wrapper">
+                <span class="input-prompt">></span>
+                <input type="text" id="command-input" placeholder="Befehl eingeben... (/help für Hilfe)" autocomplete="off">
+                <button class="btn-send" onclick="sendCommand()">Senden</button>
+            </div>
+        </div>
+        <div class="console-footer">
+            <div class="status-bar">
+                <span class="status-item">Status: <span id="connection-status" class="status-connected">Verbunden</span></span>
+                <span class="status-item">Nachrichten: <span id="message-count">0</span></span>
+                <span class="status-item">Port: <span id="server-port">3000</span></span>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

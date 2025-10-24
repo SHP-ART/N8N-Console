@@ -1,0 +1,102 @@
+{
+  "name": "Console Integration Beispiel",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "bbe5e339-573c-4917-8649-a27f29e6330d",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "bbe5e339-573c-4917-8649-a27f29e6330d"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/webhook",
+        "options": {},
+        "bodyParametersJson": "={\n  \"type\": \"info\",\n  \"message\": \"Webhook empfangen\",\n  \"data\": {{ $json }}\n}"
+      },
+      "name": "Console - Empfangen",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/webhook",
+        "options": {},
+        "bodyParametersJson": "={\n  \"type\": \"success\",\n  \"message\": \"Verarbeitung abgeschlossen\",\n  \"data\": {\n    \"originalData\": {{ $json }},\n    \"processedAt\": \"{{ $now }}\",\n    \"status\": \"completed\"\n  }\n}"
+      },
+      "name": "Console - Erfolg",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { \"success\": true, \"message\": \"Daten empfangen und an Console gesendet\" } }}"
+      },
+      "name": "Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://localhost:3000/webhook",
+        "options": {},
+        "bodyParametersJson": "={\n  \"type\": \"error\",\n  \"message\": \"Fehler bei der Verarbeitung\",\n  \"data\": {\n    \"error\": \"{{ $json.error.message }}\",\n    \"node\": \"{{ $json.node.name }}\"\n  }\n}"
+      },
+      "name": "Console - Fehler",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [680, 480]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Console - Empfangen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Console - Empfangen": {
+      "main": [
+        [
+          {
+            "node": "Console - Erfolg",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Console - Erfolg": {
+      "main": [
+        [
+          {
+            "node": "Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
