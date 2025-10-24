@@ -161,37 +161,14 @@ else
 fi
 
 #######################################
-# 4. Konfiguration in server.js schreiben
+# 4. Konfiguration vorbereiten
 #######################################
 
-print_step "Konfiguriere server.js..."
+print_step "Bereite Konfiguration vor..."
 
-# Backup erstellen
-if [ -f server.js ]; then
-    cp server.js server.js.backup
-    print_success "Backup erstellt: server.js.backup"
-fi
-
-# n8n Webhook URL aktualisieren
-if [ ! -z "$N8N_WEBHOOK_ID" ]; then
-    # Verwende sed mit unterschiedlicher Syntax für macOS und Linux
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        # macOS
-        sed -i '' "s|const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL.*|const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || '${N8N_WEBHOOK_URL}';|g" server.js
-    else
-        # Linux
-        sed -i "s|const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL.*|const N8N_WEBHOOK_URL = process.env.N8N_WEBHOOK_URL || '${N8N_WEBHOOK_URL}';|g" server.js
-    fi
-    print_success "n8n Webhook URL konfiguriert: $N8N_WEBHOOK_URL"
-fi
-
-# Port aktualisieren
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    sed -i '' "s|const PORT = process.env.PORT.*|const PORT = process.env.PORT || ${CONSOLE_PORT};|g" server.js
-else
-    sed -i "s|const PORT = process.env.PORT.*|const PORT = process.env.PORT || ${CONSOLE_PORT};|g" server.js
-fi
-print_success "Port konfiguriert: $CONSOLE_PORT"
+# Konfiguration erfolgt über .env Datei (siehe nächster Schritt)
+# server.js liest automatisch die .env Variablen
+print_success "Konfiguration wird über .env Datei gesetzt"
 
 #######################################
 # 5. .env Datei erstellen (optional)
@@ -524,7 +501,6 @@ fi
 
 echo ""
 echo -e "${YELLOW}⚠ Wichtig:${NC}"
-echo "  - Backup erstellt: server.js.backup"
 echo "  - Konfiguration gespeichert in: .env"
 echo "  - Port ${CONSOLE_PORT} muss von n8n erreichbar sein!"
 if [[ "$OSTYPE" != "darwin"* ]] && command_exists ufw; then
