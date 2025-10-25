@@ -16,6 +16,10 @@
             <div class="console-controls">
                 <button class="btn-clear" onclick="clearConsole()">Clear</button>
                 <button class="btn-toggle" onclick="toggleAutoScroll()">Auto-Scroll: <span id="autoscroll-status">ON</span></button>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="show-system" checked onchange="toggleSystemMessages()">
+                    <span>System</span>
+                </label>
             </div>
         </div>
         <div class="console-body" id="console">

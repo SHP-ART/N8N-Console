@@ -74,6 +74,12 @@ function addConsoleMessage(data) {
 
     consoleBody.appendChild(line);
 
+    // Verstecke System-Nachrichten wenn Checkbox deaktiviert
+    if (type === 'system') {
+        const showSystem = document.getElementById('show-system').checked;
+        line.style.display = showSystem ? 'block' : 'none';
+    }
+
     // Update Message Count
     messageCount++;
     document.getElementById('message-count').textContent = messageCount;
@@ -87,7 +93,10 @@ function addConsoleMessage(data) {
 // Lösche alle Console-Nachrichten
 function clearConsole() {
     const consoleBody = document.getElementById('console');
-    consoleBody.innerHTML = '<div class="console-line system"><span class="timestamp">[System]</span><span class="message">Console geleert.</span></div>';
+    const showSystem = document.getElementById('show-system').checked;
+    const displayStyle = showSystem ? 'block' : 'none';
+
+    consoleBody.innerHTML = `<div class="console-line system" style="display: ${displayStyle}"><span class="timestamp">[System]</span><span class="message">Console geleert.</span></div>`;
     messageCount = 0;
     document.getElementById('message-count').textContent = messageCount;
 }
@@ -96,6 +105,16 @@ function clearConsole() {
 function toggleAutoScroll() {
     autoScroll = !autoScroll;
     document.getElementById('autoscroll-status').textContent = autoScroll ? 'ON' : 'OFF';
+}
+
+// Toggle System Messages
+function toggleSystemMessages() {
+    const showSystem = document.getElementById('show-system').checked;
+    const systemMessages = document.querySelectorAll('.console-line.system');
+
+    systemMessages.forEach(msg => {
+        msg.style.display = showSystem ? 'block' : 'none';
+    });
 }
 
 // Update Connection Status
