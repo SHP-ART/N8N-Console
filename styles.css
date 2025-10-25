@@ -6,8 +6,8 @@
 
 body {
     font-family: 'Courier New', Courier, monospace;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    color: #00ff00;
+    background: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+    color: #ffffff;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -19,19 +19,19 @@ body {
     width: 100%;
     max-width: 1200px;
     height: 90vh;
-    background: rgba(0, 0, 0, 0.9);
+    background: rgba(0, 0, 0, 0.95);
     border-radius: 10px;
-    box-shadow: 0 0 30px rgba(0, 255, 0, 0.3);
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border: 2px solid #00ff00;
+    border: 2px solid #ffffff;
 }
 
 .console-header {
-    background: linear-gradient(180deg, #1a4d1a 0%, #0d260d 100%);
+    background: linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%);
     padding: 15px 20px;
-    border-bottom: 2px solid #00ff00;
+    border-bottom: 2px solid #ffffff;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -46,7 +46,7 @@ body {
 }
 
 .console-icon {
-    color: #00ff00;
+    color: #ffffff;
     font-size: 20px;
     animation: pulse 2s infinite;
 }
@@ -62,9 +62,9 @@ body {
 }
 
 button {
-    background: rgba(0, 255, 0, 0.1);
-    border: 1px solid #00ff00;
-    color: #00ff00;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #ffffff;
+    color: #ffffff;
     padding: 8px 15px;
     border-radius: 5px;
     cursor: pointer;
@@ -74,8 +74,8 @@ button {
 }
 
 button:hover {
-    background: rgba(0, 255, 0, 0.2);
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    background: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
 }
 
 button:active {
@@ -98,19 +98,19 @@ button:active {
 }
 
 .console-body::-webkit-scrollbar-thumb {
-    background: #00ff00;
+    background: #ffffff;
     border-radius: 5px;
 }
 
 .console-body::-webkit-scrollbar-thumb:hover {
-    background: #00cc00;
+    background: #cccccc;
 }
 
 .console-line {
     margin-bottom: 10px;
     padding: 8px 12px;
-    border-left: 3px solid #00ff00;
-    background: rgba(0, 255, 0, 0.05);
+    border-left: 3px solid #ffffff;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 3px;
     animation: fadeIn 0.3s ease;
     line-height: 1.6;
@@ -128,33 +128,33 @@ button:active {
 }
 
 .console-line.info {
-    border-left-color: #00bfff;
-    color: #00bfff;
-    background: rgba(0, 191, 255, 0.05);
+    border-left-color: #bbbbbb;
+    color: #bbbbbb;
+    background: rgba(187, 187, 187, 0.05);
 }
 
 .console-line.warning {
-    border-left-color: #ffaa00;
-    color: #ffaa00;
-    background: rgba(255, 170, 0, 0.05);
+    border-left-color: #dddddd;
+    color: #dddddd;
+    background: rgba(221, 221, 221, 0.05);
 }
 
 .console-line.error {
-    border-left-color: #ff0000;
-    color: #ff0000;
-    background: rgba(255, 0, 0, 0.05);
+    border-left-color: #999999;
+    color: #999999;
+    background: rgba(153, 153, 153, 0.05);
 }
 
 .console-line.success {
-    border-left-color: #00ff00;
-    color: #00ff00;
-    background: rgba(0, 255, 0, 0.05);
+    border-left-color: #ffffff;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .console-line.system {
-    border-left-color: #888;
-    color: #888;
-    background: rgba(136, 136, 136, 0.05);
+    border-left-color: #777777;
+    color: #777777;
+    background: rgba(119, 119, 119, 0.05);
 }
 
 .timestamp {
@@ -180,8 +180,8 @@ button:active {
 .console-input {
     background: #000;
     padding: 15px 20px;
-    border-top: 1px solid #00ff00;
-    border-bottom: 2px solid #00ff00;
+    border-top: 1px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
 }
 
 .input-wrapper {
@@ -191,7 +191,7 @@ button:active {
 }
 
 .input-prompt {
-    color: #00ff00;
+    color: #ffffff;
     font-size: 18px;
     font-weight: bold;
     flex-shrink: 0;
@@ -199,9 +199,9 @@ button:active {
 
 #command-input {
     flex: 1;
-    background: rgba(0, 255, 0, 0.05);
-    border: 1px solid #00ff00;
-    color: #00ff00;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #ffffff;
+    color: #ffffff;
     padding: 10px 15px;
     border-radius: 5px;
     font-family: 'Courier New', Courier, monospace;
@@ -211,8 +211,8 @@ button:active {
 }
 
 #command-input:focus {
-    background: rgba(0, 255, 0, 0.1);
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
 
 #command-input::placeholder {
@@ -220,9 +220,9 @@ button:active {
 }
 
 .btn-send {
-    background: rgba(0, 255, 0, 0.2);
-    border: 1px solid #00ff00;
-    color: #00ff00;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #ffffff;
+    color: #ffffff;
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
@@ -234,8 +234,8 @@ button:active {
 }
 
 .btn-send:hover {
-    background: rgba(0, 255, 0, 0.3);
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.5);
+    background: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
 }
 
 .btn-send:active {
@@ -243,9 +243,9 @@ button:active {
 }
 
 .console-footer {
-    background: linear-gradient(180deg, #0d260d 0%, #1a4d1a 100%);
+    background: linear-gradient(180deg, #1a1a1a 0%, #2a2a2a 100%);
     padding: 10px 20px;
-    border-top: 2px solid #00ff00;
+    border-top: 2px solid #ffffff;
 }
 
 .status-bar {
@@ -259,12 +259,12 @@ button:active {
 }
 
 .status-connected {
-    color: #00ff00;
+    color: #ffffff;
     font-weight: bold;
 }
 
 .status-disconnected {
-    color: #ff0000;
+    color: #888888;
     font-weight: bold;
 }
 
