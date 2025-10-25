@@ -93,10 +93,9 @@ function addConsoleMessage(data) {
 // Lösche alle Console-Nachrichten
 function clearConsole() {
     const consoleBody = document.getElementById('console');
-    const showSystem = document.getElementById('show-system').checked;
-    const displayStyle = showSystem ? 'block' : 'none';
 
-    consoleBody.innerHTML = `<div class="console-line system" style="display: ${displayStyle}"><span class="timestamp">[System]</span><span class="message">Console geleert.</span></div>`;
+    // Einfach leeren ohne System-Nachricht
+    consoleBody.innerHTML = '';
     messageCount = 0;
     document.getElementById('message-count').textContent = messageCount;
 }

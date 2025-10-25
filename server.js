@@ -41,11 +41,7 @@ app.get('/events', (req, res) => {
 
     console.log(`Client ${clientId} verbunden. Aktive Clients: ${clients.length}`);
 
-    // Sende initiale Verbindungsbestätigung
-    res.write(`data: ${JSON.stringify({
-        type: 'system',
-        message: 'Verbindung hergestellt'
-    })}\n\n`);
+    // Keine initiale Nachricht mehr - nur Status-Anzeige im Footer
 
     // Entferne Client bei Verbindungsabbruch
     req.on('close', () => {
