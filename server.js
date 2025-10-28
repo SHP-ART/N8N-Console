@@ -57,7 +57,7 @@ app.post('/webhook', (req, res) => {
     const message = {
         type: req.body.type || 'info',
         message: req.body.message || 'Nachricht von n8n',
-        data: req.body.data || req.body
+        data: req.body.data  // Kein Fallback mehr auf req.body!
     };
 
     // Sende Nachricht an alle verbundenen Clients
@@ -75,7 +75,7 @@ app.post('/message', (req, res) => {
     const message = {
         type: req.body.type || 'info',
         message: req.body.message || 'Keine Nachricht',
-        data: req.body.data
+        data: req.body.data  // Konsistent: Kein Fallback
     };
 
     broadcastMessage(message);
