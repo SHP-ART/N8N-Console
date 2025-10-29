@@ -35,16 +35,28 @@ app.get('/events', (req, res) => {
     const clientId = Date.now();
     const newClient = {
         id: clientId,
-        res
+        res,
+        lastActivity: Date.now()
     };
     clients.push(newClient);
 
     console.log(`Client ${clientId} verbunden. Aktive Clients: ${clients.length}`);
 
-    // Keine initiale Nachricht mehr - nur Status-Anzeige im Footer
+    // Heartbeat: Sende alle 30 Sekunden einen Ping
+    const heartbeat = setInterval(() => {
+        try {
+            res.write(':ping\n\n');
+            newClient.lastActivity = Date.now();
+        } catch (error) {
+            clearInterval(heartbeat);
+            clients = clients.filter(client => client.id !== clientId);
+            console.log(`Client ${clientId} Heartbeat fehlgeschlagen. Entfernt.`);
+        }
+    }, 30000);
 
     // Entferne Client bei Verbindungsabbruch
     req.on('close', () => {
+        clearInterval(heartbeat);
         clients = clients.filter(client => client.id !== clientId);
         console.log(`Client ${clientId} getrennt. Aktive Clients: ${clients.length}`);
     });
@@ -187,6 +199,30 @@ app.get('/status', (req, res) => {
         timestamp: new Date().toISOString()
     });
 });
+
+// Automatisches Cleanup von inaktiven Clients (alle 2 Minuten)
+setInterval(() => {
+    const now = Date.now();
+    const timeout = 5 * 60 * 1000; // 5 Minuten Inaktivität
+    const before = clients.length;
+
+    clients = clients.filter(client => {
+        const inactive = (now - client.lastActivity) > timeout;
+        if (inactive) {
+            console.log(`Client ${client.id} inaktiv seit ${Math.round((now - client.lastActivity) / 1000)}s. Entfernt.`);
+            try {
+                client.res.end();
+            } catch (e) {
+                // Ignoriere Fehler beim Schließen
+            }
+        }
+        return !inactive;
+    });
+
+    if (before !== clients.length) {
+        console.log(`Cleanup: ${before - clients.length} inaktive Clients entfernt. Aktive: ${clients.length}`);
+    }
+}, 2 * 60 * 1000);
 
 // Root Endpoint
 app.get('/', (req, res) => {
